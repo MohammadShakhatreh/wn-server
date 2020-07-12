@@ -1,0 +1,16 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+  datasource:
+    url: jdbc:postgresql://localhost:5432/wn
+    username: postgres
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+application:
+  jwt:
+    secret: yQ9H5OcEwqSenBrRBOg01nLwRBEXk3OAZcHA6GWwb2M=
