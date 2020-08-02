@@ -20,9 +20,9 @@ Giving that the `maze.json` is in the same directory as the jar file.
 $ java -jar world-navigator-0.0.1-jar-with-dependencies.jar
 ```
 
-## WN API Endpoints
+## Postman Collection for the api
 
-
+[Postman Collection](https://www.getpostman.com/collections/1a288a49ef9f5aed7ada)
 
 ## Maze Specification
 
