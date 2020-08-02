@@ -85,7 +85,7 @@ return access to it by the `getPrices` method.
 ## Item 19: Design And Document For Inheritance Or Else Prohibit It
 
 The classes that are designed for inheritance in the project are
-`Item`, `RoomSide` and `Shell` classes.
+`Item`, `RoomSide` and `Invoker` classes.
 
 In the `Item` class it's made clear that the `toString` method 
 must be overridden and what to be expected from it.
@@ -100,21 +100,6 @@ must be overridden and what to be expected from it.
  */
 @Override
 public abstract String toString();
-```
-
-The `Shell` class also is designed to inherited.
-
-Here is made a comment on how the method is used in the class.
-
-```
-/**
- * Used by the while loop in the execute method of the shell.
- *
- * @return true if the shell must stop.
- */
-public boolean done() {
-    return done;
-}
 ```
 
 Any class that is not design for inheritance I made it `final`
@@ -133,7 +118,7 @@ This way the code is clean, short and can be easily extensible.
 
 ## Item 24: Favor static member classes over nonstatic
 
-I used inner classes in `Shell`, `UseCommand`, `LookCommand` and `CheckCommand` classes.
+I used inner classes in `Invoker` class.
 
 I didn't put them as static because they need to access the enclosing instance.
 
@@ -171,15 +156,33 @@ using this can prevent hidden bugs like when overriding `equals` method.
 
 ## Item 49: Check parameters for validity
 
-In the `Player` class constructor.
+from the `Lock` class
 
-![ItemVisitor](./Validity.png)
+```
+@JsonCreator
+public Lock(
+        @JsonProperty("key") Key key,
+        @JsonProperty("open") boolean open,
+        @JsonProperty("locked") boolean locked
+) {
+    this.key = key;
+
+    if(open && locked)
+        throw new IllegalArgumentException("The lock can't be open and locked at the same time.");
+
+    if(key == null && locked)
+        throw new IllegalArgumentException("You have to provide a key if you want to lock things.");
+
+    this.open = open;
+    this.locked = locked;
+}
+```
 
 `Objects.requireNonNull` is used when ever appropriate.
 
 ## Item 53: Use varargs judiciously
 
-I used `varagrs` in `Command` interface and according to the book 
+I used `varargs` in `Command` interface and according to the book 
 it's safe as the signature didn't declare a generic type. 
 
 ## Item 55: Return optionals judiciously
@@ -194,21 +197,28 @@ making the method returns `Optional` enforces that.
 
 ## Use Intention-Revealing Names
 
-For example the `Openable` interface the name implies that the 
+For example the `Lockable` interface the name implies that the 
 object can be open or closed, and it's applied to the door and the chest
 
 ```
-public interface Openable {
-    void open();
-    boolean isOpen();
-    boolean lock(Item key);
-    boolean unlock(Item key);
-    boolean isUnlocked();
-    Key getKey();
+public interface Lockable {
+    Lock getLock();
 }
 ```
 
-And each method has a clear name defining what it does.
+and For `HiddenItem` interface
+
+```
+public interface HiddenItem {
+
+    Optional<Item> getItem();
+
+    void setCollected(boolean collected);
+
+    boolean isCollected();
+}
+
+```
 
 ## Use Solution Domain Names
 
@@ -216,44 +226,10 @@ And each method has a clear name defining what it does.
 
 `RoomSideVisitor` makes it clear that the interface represents a visitor pattern.
 
-## Hungarian Notation
-
-Following the the book's advice the name that gets the player's current
-room is named `player.current()` as the IDE can infer the type.
-
 ## Functions should be small
 
 following the book's advice all functions that I have written
 are no more than 20 lines give or take.
-
-In the `Shell` the `execute` method is broken down to a smaller methods
-each one has a single responsibility.
-
-```
-@Override
-public void execute(String... args) {
-
-    while(!done()) {
-        output.print(prompt + PROMPT_SUFFIX);
-
-        String[] parts = read();
-        String command = parts[0];
-        String arguments = parts[1];
-
-        if(command.isEmpty())
-            continue;
-
-        execute(command, arguments);
-    }
-}
-```
-
-The `done()` method is responsible for whether the shell should exit or not.
-
-The `read()` method is responsible for reading a command from the user.
-
-The `execute()` private method is responsible for finding the command and executing 
-the command.
 
 This way the methods are small, clear and readable.
 
@@ -261,7 +237,7 @@ This way the methods are small, clear and readable.
 
 Instead of repeating the code in the `CheckVisitor` for the `Door`
 and the `Chest` I made a method for handling both using the fact that
-the implementation depends on the `Openable` interface, and made the 
+the implementation depends on the `Lockable` interface, and made the 
 same for the `Painting` and the `Mirror` class as the implementation 
 depands on the `HiddenItem` interface.
 
@@ -293,28 +269,6 @@ When implementing an interface the methods of it should be together.
 
 # Design Patterns
 
-## Composite Pattern
-
-Defining the commands hierarchy where a simple command is a leaf
-and the shell is a composite.
-
-Each shell has a list of commands that are related to the giving shell
-and a shell can have another shell in the list of its commands.
-
-![Composite](./Composite.png)
-
-## Iterator Pattern
-
-Defining the relation between the maze and the player.
-
-That is the player is an iterator of the maze.
-
-By making the player an iterator you can have more than player
-for the same maze and the you don't have to give 
-the maze instance with the player instance. 
-
-![Iterator](./Iterator.png)
-
 ## Visitor Pattern
 
 This pattern is used in the `check`, `look` and `use` commands as these
@@ -345,6 +299,18 @@ This pattern is used in the `ItemFactory` and the `GameLoader`
 
 as we need one object from these classes and global access to them.
 
+## Command Pattern
+
+Used to implement the various commands of the game
+
+![CommandPattern](./CommandPattern.png)
+
+## State Pattern
+
+Used to implement the Invokers as they represent the state of the player whether the player is in trade 
+mode, game mode or fight mode.
+
+![StatePattern](./StatePattern.png)
 
 # SOLID Principles
 
@@ -352,12 +318,9 @@ as we need one object from these classes and global access to them.
 
 For example the `Player` class has a responsibility to store the state of the player.
 
-And making the player is the responsibility of the `Maze` class as the player is an iterator
-of the maze.
-
 ## Open-Closed Principle
 
-`Command` hierarchy follows this principle that you can add commands and shell without
+`Command` hierarchy follows this principle that you can add commands without
 affecting other commands.
 
 `RoomSide` hierarchy you can also add subclasses without affecting others, but because
@@ -377,14 +340,14 @@ like the `TradeShell` in the `GlobalShell`.
 
 ## Interface segregation principle
 
-Based on this principle I made `Openable` and `HiddenItem` interfaces
+Based on this principle I made `Lockable` and `HiddenItem` interfaces
 because not all `RoomSide` subclasses are openable like the `Chest`
 and `Door` classes, and not all subclasses have hidden items like 
 `Painting` and `Mirror`,
 
 ## Dependency Inversion principle
 
-For example in the `Shell` class it depends on the `Input`, `Output`, `Command` and
+For example in the `Invoker` class it depends on the `Command` and
 `Map` interfaces, and these are abstractions.
 
 And when ever I need a list or a map I define them by their interfaces `List` and `Map`.

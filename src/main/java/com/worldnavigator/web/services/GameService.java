@@ -30,7 +30,10 @@ public class GameService {
         if(game == null)
             throw new NoSuchElementException("There is no game with this uuid.");
 
-        var players = game.getPlayers();
+        if(game.isStarted())
+            throw new IllegalStateException("The game started you can't join.");
+
+        Map<String, Player> players = game.getPlayers();
         if(players.containsKey(user.getUsername()))
             throw new IllegalArgumentException("There is already a player with this name.");
 

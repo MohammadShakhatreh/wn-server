@@ -65,8 +65,12 @@ public class Game {
     }
 
     public boolean isFinished() {
-        return this.getStartedAt()
-                .plusMinutes(this.getTimeout())
+        return startedAt
+                .plusMinutes(timeout)
                 .isBefore(LocalDateTime.now());
+    }
+
+    public boolean isStarted() {
+        return LocalDateTime.now().isAfter(startedAt);
     }
 }

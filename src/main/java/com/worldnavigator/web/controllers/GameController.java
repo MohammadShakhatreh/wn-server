@@ -27,7 +27,6 @@ public class GameController {
     }
 
     @PostMapping
-    @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     public Game create(User user, @Valid @RequestBody NewGameRequest request) {
         return gameService.create(user, request);

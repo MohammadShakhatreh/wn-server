@@ -1,5 +1,10 @@
 # World Navigator
 
+## TODO List
+
+- Simple frontend for the game
+- Implement CI/CD with Jenkins
+
 ## Packaging and running 
 
 To get an executable jar file
@@ -16,6 +21,7 @@ $ java -jar world-navigator-0.0.1-jar-with-dependencies.jar
 ```
 
 ## WN API Endpoints
+
 
 
 ## Maze Specification
