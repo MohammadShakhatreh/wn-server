@@ -6,13 +6,13 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.3.1.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>com.worldnavigator</groupId>
 	<artifactId>world-navigator</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>world-navigator</name>
-	<description>Multi-player text adventure game.</description>
+	<name>World Navigator</name>
+	<description>Multi-player text adventure game</description>
 
 	<properties>
 		<java.version>11</java.version>

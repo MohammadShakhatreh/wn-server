@@ -2,10 +2,11 @@ package com.worldnavigator.game.maze.items;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+
 @JsonDeserialize(using = ItemDeserializer.class)
 public abstract class Item {
 
-    public abstract void accept(ItemVisitor visitor);
+    public abstract String accept(ItemVisitor visitor);
 
     /**
      * This method made is abstract to make all items

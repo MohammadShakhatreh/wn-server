@@ -13,8 +13,8 @@ public final class Flashlight extends Item {
     }
 
     @Override
-    public void accept(ItemVisitor visitor) {
-        visitor.execute(this);
+    public String accept(ItemVisitor visitor) {
+        return visitor.execute(this);
     }
 
     public void setOn(boolean isOn) {

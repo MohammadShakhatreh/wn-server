@@ -11,10 +11,7 @@ public final class Seller extends RoomSide {
     private final Map<String, Integer> prices;
 
     @JsonCreator
-    public Seller(
-            @JsonProperty("prices") Map<String, Integer> prices
-    ) {
-
+    public Seller(@JsonProperty("prices") Map<String, Integer> prices) {
         this.prices = Objects.requireNonNull(prices);
     }
 
@@ -23,8 +20,8 @@ public final class Seller extends RoomSide {
     }
 
     @Override
-    public void accept(RoomSideVisitor visitor) {
-        visitor.execute(this);
+    public String accept(RoomSideVisitor visitor) {
+        return visitor.execute(this);
     }
 
     public Map<String, Integer> getPrices() {

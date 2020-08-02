@@ -1,13 +1,11 @@
 package com.worldnavigator.web.controllers;
 
+import com.worldnavigator.game.maze.Maze;
 import com.worldnavigator.web.services.MazeTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping("mazes")
@@ -21,13 +19,8 @@ public class MazeTemplateController {
     }
 
     @PostMapping
-    public String create(@RequestParam MultipartFile file,
-                                   RedirectAttributes redirectAttributes) {
+    @ResponseStatus(CREATED)
+    public void create(@RequestBody Maze maze) {
 
-        //storageService.store(file);
-        redirectAttributes.addFlashAttribute("message",
-                "You successfully uploaded " + file.getOriginalFilename() + "!");
-
-        return "redirect:/";
     }
 }

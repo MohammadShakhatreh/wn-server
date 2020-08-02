@@ -2,83 +2,35 @@ package com.worldnavigator.game.maze.room;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.worldnavigator.game.maze.items.Item;
-import com.worldnavigator.game.maze.items.Key;
 
-import java.util.Objects;
+public final class Door extends RoomSide implements Lockable {
 
-public final class Door extends RoomSide implements Openable {
-    private final Key key;
-    private boolean isOpen;
-    private boolean isUnlocked;
+    private final int room;
 
-    private final int nextRoom;
+    private final Lock lock;
 
     @JsonCreator
     public Door(
-            @JsonProperty("key") Key key,
-            @JsonProperty("nextRoom") int nextRoom,
-            @JsonProperty("open") boolean isOpen,
-            @JsonProperty("unlocked") boolean isUnlocked
+            @JsonProperty("room") int room,
+            @JsonProperty("lock") Lock lock
     ) {
-        this.key = key;
 
-        if(isOpen && !isUnlocked)
-            throw new IllegalArgumentException("if isOpen is true so should the isUnlocked");
-
-        this.isOpen = isOpen;
-        this.isUnlocked = isUnlocked;
-
-        this.nextRoom = nextRoom;
+        this.room = room;
+        this.lock = lock;
     }
 
     @Override
-    public void accept(RoomSideVisitor visitor) {
-        visitor.execute(this);
+    public String accept(RoomSideVisitor visitor) {
+        return visitor.execute(this);
     }
 
     @Override
-    public void open() {
-        if(isUnlocked())
-            isOpen = true;
+    public Lock getLock() {
+        return lock;
     }
 
-    @Override
-    public boolean lock(Item key) {
-        if(Objects.equals(this.key, key)) {
-            isOpen = false;
-            isUnlocked = false;
-        }
-
-        return !isUnlocked;
-    }
-
-    @Override
-    public boolean unlock(Item key) {
-        if(Objects.equals(this.key, key))
-            isUnlocked = true;
-
-        return isUnlocked;
-    }
-
-
-    @Override
-    public boolean isOpen() {
-        return isOpen;
-    }
-
-    @Override
-    public boolean isUnlocked() {
-        return isUnlocked;
-    }
-
-    public int getNextRoom() {
-        return nextRoom;
-    }
-
-    @Override
-    public Key getKey() {
-        return key;
+    public int getRoom() {
+        return room;
     }
 
     @Override

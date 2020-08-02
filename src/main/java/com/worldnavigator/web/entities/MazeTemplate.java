@@ -23,5 +23,5 @@ public class MazeTemplate {
     private String name;
 
     @Column(nullable = false, unique = true)
-    private String s3Url;
+    private String s3Key;
 }

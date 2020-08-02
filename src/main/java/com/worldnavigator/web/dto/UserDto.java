@@ -8,9 +8,9 @@ import javax.validation.constraints.Pattern;
 
 @Getter
 @AllArgsConstructor
-public class AccountDto {
+public class UserDto {
 
-    @NotBlank
+    @NotBlank(message = "Must be not blank.")
     private final String name;
 
     @Pattern(
@@ -19,6 +19,6 @@ public class AccountDto {
     )
     private final String username;
 
-    @NotBlank
+    @NotBlank(message = "Must be not blank.")
     private final String password;
 }

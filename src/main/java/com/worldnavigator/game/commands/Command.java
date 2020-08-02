@@ -1,12 +1,14 @@
 package com.worldnavigator.game.commands;
 
+import org.springframework.util.StringUtils;
+
 public interface Command {
 
     /**
      *
      * @param args The arguments the command takes
      */
-    void execute(String...args);
+    String execute(String...args);
 
     /**
      * Command name used to execute it.
@@ -34,7 +36,7 @@ public interface Command {
     default String usage() {
         String arguments = args();
 
-        if(arguments == null || arguments.isEmpty())
+        if(StringUtils.hasText(arguments))
             return name();
 
         return name() + " " + arguments;

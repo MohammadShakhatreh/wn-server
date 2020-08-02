@@ -10,8 +10,8 @@ public final class Key extends Item {
     }
 
     @Override
-    public void accept(ItemVisitor visitor) {
-        visitor.execute(this);
+    public String accept(ItemVisitor visitor) {
+        return visitor.execute(this);
     }
 
     @Override

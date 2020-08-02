@@ -3,23 +3,23 @@ package com.worldnavigator.game.maze.room;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.worldnavigator.game.Player;
 import com.worldnavigator.game.maze.Direction;
-import lombok.NoArgsConstructor;
+import com.worldnavigator.game.maze.items.Item;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public final class Room {
 
     private boolean isLit;
-    private boolean hasLights;
+    private final boolean hasLights;
 
     @JsonDeserialize(as = EnumMap.class)
-    private Map<Direction, RoomSide> sides;
+    private final Map<Direction, RoomSide> sides;
+
+    private final List<Player> players = new ArrayList<>();
+
+    private final Map<String, Item> items = new HashMap<>();
 
     @JsonCreator
     public Room(
@@ -47,5 +47,17 @@ public final class Room {
 
     public boolean hasLights() {
         return hasLights;
+    }
+
+    public Map<Direction, RoomSide> getSides() {
+        return sides;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void addItems(Map<String, Item> items) {
+        this.items.putAll(items);
     }
 }

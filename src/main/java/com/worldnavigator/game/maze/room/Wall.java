@@ -3,8 +3,8 @@ package com.worldnavigator.game.maze.room;
 public final class Wall extends RoomSide {
 
     @Override
-    public void accept(RoomSideVisitor visitor) {
-        visitor.execute(this);
+    public String accept(RoomSideVisitor visitor) {
+        return visitor.execute(this);
     }
 
     @Override

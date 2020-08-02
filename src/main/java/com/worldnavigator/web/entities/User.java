@@ -14,7 +14,8 @@ import java.util.List;
 @Entity
 @ToString
 @NoArgsConstructor
-public class Account implements UserDetails {
+@Table(name = "users")
+public class User implements UserDetails {
 
     @Column(nullable = false)
     private String name;
@@ -30,7 +31,7 @@ public class Account implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Authority> authorities;
 
-    public Account(
+    public User(
             String name,
             String username,
             String password
@@ -38,11 +39,11 @@ public class Account implements UserDetails {
         this(name, username, password, true, Collections.emptyList());
     }
 
-    public Account(String name,
-                   String username,
-                   String password,
-                   boolean enabled,
-                   List<Authority> authorities
+    public User(String name,
+                String username,
+                String password,
+                boolean enabled,
+                List<Authority> authorities
     ) {
         this.name = name;
         this.username = username;
@@ -95,3 +96,4 @@ public class Account implements UserDetails {
         return true;
     }
 }
+

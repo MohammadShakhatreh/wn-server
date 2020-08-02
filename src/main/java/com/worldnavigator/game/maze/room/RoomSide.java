@@ -17,5 +17,5 @@ import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 })
 public abstract class RoomSide {
 
-    public abstract void accept(RoomSideVisitor visitor);
+    public abstract String accept(RoomSideVisitor visitor);
 }

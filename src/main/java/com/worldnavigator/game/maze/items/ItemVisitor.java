@@ -2,7 +2,7 @@ package com.worldnavigator.game.maze.items;
 
 public interface ItemVisitor {
 
-    void execute(Key key);
+    String execute(Key key);
 
-    void execute(Flashlight flashlight);
+    String execute(Flashlight flashlight);
 }

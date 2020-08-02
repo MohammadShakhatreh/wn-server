@@ -2,15 +2,15 @@ package com.worldnavigator.game.maze.room;
 
 public interface RoomSideVisitor {
 
-    void execute(Mirror mirror);
+    String execute(Mirror mirror);
 
-    void execute(Painting painting);
+    String execute(Painting painting);
 
-    void execute(Chest chest);
+    String execute(Chest chest);
 
-    void execute(Door door);
+    String execute(Door door);
 
-    void execute(Seller seller);
+    String execute(Seller seller);
 
-    void execute(Wall wall);
+    String execute(Wall wall);
 }
