@@ -40,10 +40,10 @@ public class FightInvoker extends Invoker {
                 return "You won!";
 
             case LOST:
+                game.removePlayer(player);
                 game.distributePlayerGold(player);
                 Player opponent = fight.getOpponent(player);
                 opponent.addItems(player.getItems());
-                game.removePlayer(player);
                 return "You lost!";
 
             case TIE:

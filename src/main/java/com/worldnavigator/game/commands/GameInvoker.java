@@ -54,16 +54,15 @@ public class GameInvoker extends Invoker {
                 Lock lock = lockable.getLock();
 
                 if(lock.isLocked()) {
+                    return String.format("The %s is locked, you need a %s to unlock it!", lockable, lock.getKey().orElseThrow());
 
+                } else {
                     if(lock.isOpen()) {
                         return String.format("The %s is already open!", lockable);
                     } else {
                         lock.open();
                         return String.format("The %s is now open!", lockable);
                     }
-
-                } else {
-                    return String.format("The %s is locked, you need a %s to unlock it!", lockable, lock.getKey().orElseThrow());
                 }
             }
 
