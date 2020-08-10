@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.worldnavigator.game.maze.items.Key;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.IntSequenceGenerator.class
@@ -26,13 +25,10 @@ public final class Lock {
             @JsonProperty("open") boolean open,
             @JsonProperty("locked") boolean locked
     ) {
-        this.key = key;
+        this.key = Objects.requireNonNull(key);
 
         if(open && locked)
             throw new IllegalArgumentException("The lock can't be open and locked at the same time.");
-
-        if(key == null && locked)
-            throw new IllegalArgumentException("You have to provide a key if you want to lock things.");
 
         this.open = open;
         this.locked = locked;
@@ -69,7 +65,7 @@ public final class Lock {
         return locked;
     }
 
-    public Optional<Key> getKey() {
-        return Optional.ofNullable(key);
+    public Key getKey() {
+        return key;
     }
 }

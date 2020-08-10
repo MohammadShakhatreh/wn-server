@@ -1,6 +1,8 @@
 package com.worldnavigator.game.maze.room;
 
+import java.util.Optional;
+
 public interface Lockable {
 
-    Lock getLock();
+    Optional<Lock> getLock();
 }

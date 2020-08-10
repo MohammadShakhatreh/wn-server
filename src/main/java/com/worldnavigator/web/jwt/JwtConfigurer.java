@@ -11,13 +11,13 @@ import javax.crypto.SecretKey;
 public class JwtConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
     private final UserDetailsService userDetailsService;
 
-    private final JwtConfig jwtConfig;
+    private final JwtConfiguration jwtConfig;
     private final SecretKey secretKey;
 
-    public JwtConfigurer(JwtConfig jwtConfig,
-                     SecretKey secretKey,
-                     UserDetailsService userDetailsService) {
-        this.jwtConfig = jwtConfig;
+    public JwtConfigurer(JwtConfiguration jwtConfiguration,
+                         SecretKey secretKey,
+                         UserDetailsService userDetailsService) {
+        this.jwtConfig = jwtConfiguration;
         this.secretKey = secretKey;
         this.userDetailsService = userDetailsService;
     }

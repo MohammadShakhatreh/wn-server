@@ -20,18 +20,18 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Collections;
+
 public class JwtFilter extends GenericFilterBean {
 
     private final UserDetailsService userDetailsService;
 
-    private final JwtConfig jwtConfig;
+    private final JwtConfiguration jwtConfiguration;
     private final SecretKey secretKey;
 
-    public JwtFilter(JwtConfig jwtConfig,
+    public JwtFilter(JwtConfiguration jwtConfiguration,
                      SecretKey secretKey,
                      UserDetailsService userDetailsService) {
-        this.jwtConfig = jwtConfig;
+        this.jwtConfiguration = jwtConfiguration;
         this.secretKey = secretKey;
         this.userDetailsService = userDetailsService;
     }
@@ -79,7 +79,7 @@ public class JwtFilter extends GenericFilterBean {
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if(StringUtils.hasText(authorizationHeader)
-                && authorizationHeader.startsWith(jwtConfig.getPrefix() + " "))
+                && authorizationHeader.startsWith(jwtConfiguration.getPrefix() + " "))
             return authorizationHeader.split(" ")[1];
 
         return null;

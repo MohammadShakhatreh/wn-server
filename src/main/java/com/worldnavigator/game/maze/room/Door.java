@@ -1,8 +1,12 @@
 package com.worldnavigator.game.maze.room;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Optional;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public final class Door extends RoomSide implements Lockable {
 
     private final int room;
@@ -25,8 +29,8 @@ public final class Door extends RoomSide implements Lockable {
     }
 
     @Override
-    public Lock getLock() {
-        return lock;
+    public Optional<Lock> getLock() {
+        return Optional.ofNullable(lock);
     }
 
     public int getRoom() {

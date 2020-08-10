@@ -1,4 +1,4 @@
-package com.worldnavigator.game.experimental;
+package com.worldnavigator.game.controls.visitors;
 
 import com.worldnavigator.game.maze.room.*;
 

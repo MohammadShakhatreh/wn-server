@@ -12,13 +12,7 @@
         },
         "EAST": {
           "@type": "door",
-          "room": 1,
-          "lock": {
-            "@id": 1,
-            "key": "blue key",
-            "open": false,
-            "locked": true
-          }
+          "room": 1
         },
         "SOUTH": {
           "@type": "painting",
@@ -34,22 +28,7 @@
     {
       "sides": {
         "NORTH": {
-          "@type": "wall"
-        },
-        "EAST": {
-          "@type": "door",
-          "room": -1,
-          "lock": {
-            "@id": 2,
-            "open": true
-          }
-        },
-        "SOUTH": {
           "@type": "chest",
-          "lock": {
-            "@id": 3,
-            "open": true
-          },
           "gold": 200,
           "items": [
             "flashlight",
@@ -57,13 +36,162 @@
             "yellow key"
           ]
         },
+        "EAST": {
+          "@type": "door",
+          "room": 2
+        },
+        "SOUTH": {
+          "@type": "door",
+          "room": 4
+        },
         "WEST": {
           "@type": "door",
-          "room": 0,
-          "lock": 1
+          "room": 0
         }
       },
       "lit": false,
+      "hasLights": true
+    },
+    {
+      "sides": {
+        "NORTH": {
+          "@type": "wall"
+        },
+        "EAST": {
+          "@type": "door",
+          "room": 3
+        },
+        "SOUTH": {
+          "@type": "wall"
+        },
+        "WEST": {
+          "@type": "door",
+          "room": 1
+        }
+      },
+      "lit": true,
+      "hasLights": true
+    },
+    {
+      "sides": {
+        "NORTH": {
+          "@type": "door",
+          "room": -1
+        },
+        "EAST": {
+          "@type": "painting",
+          "item": "gray key"
+        },
+        "SOUTH": {
+          "@type": "wall"
+        },
+        "WEST": {
+          "@type": "door",
+          "room": 2
+        }
+      },
+      "lit": true,
+      "hasLights": true
+    },
+    {
+      "sides": {
+        "NORTH": {
+          "@type": "door",
+          "room": 1
+        },
+        "EAST": {
+          "@type": "wall"
+        },
+        "SOUTH": {
+          "@type": "door",
+          "room": 6
+        },
+        "WEST": {
+          "@type": "wall"
+        }
+      },
+      "lit": false,
+      "hasLights": true
+    },
+    {
+      "sides": {
+        "NORTH": {
+          "@type": "wall"
+        },
+        "EAST": {
+          "@type": "wall"
+        },
+        "SOUTH": {
+          "@type": "door",
+          "room": 8
+        },
+        "WEST": {
+          "@type": "wall"
+        }
+      },
+      "lit": true,
+      "hasLights": true
+    },
+    {
+      "sides": {
+        "NORTH": {
+          "@type": "door",
+          "room": 4
+        },
+        "EAST": {
+          "@type": "door",
+          "room": 7
+        },
+        "SOUTH": {
+          "@type": "door",
+          "room": -1
+        },
+        "WEST": {
+          "@type": "wall"
+        }
+      },
+      "lit": true,
+      "hasLights": true
+    },
+    {
+      "sides": {
+        "NORTH": {
+          "@type": "wall"
+        },
+        "EAST": {
+          "@type": "door",
+          "room": 8
+        },
+        "SOUTH": {
+          "@type": "wall"
+        },
+        "WEST": {
+          "@type": "door",
+          "room": 6
+        }
+      },
+      "lit": true,
+      "hasLights": true
+    },
+    {
+      "sides": {
+        "NORTH": {
+          "@type": "door",
+          "room": 5
+        },
+        "EAST": {
+          "@type": "mirror",
+          "item": "cyan key"
+        },
+        "SOUTH": {
+          "@type": "wall"
+        },
+        "WEST": {
+          "@type": "door",
+          "room": 7
+        }
+      },
+      "lit": true,
       "hasLights": true
     }
   ]

@@ -1,8 +1,6 @@
 package com.worldnavigator.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.worldnavigator.game.commands.GameInvoker;
-import com.worldnavigator.game.commands.Invoker;
 import com.worldnavigator.game.maze.Direction;
 import com.worldnavigator.game.maze.Maze;
 import com.worldnavigator.game.maze.items.Item;
@@ -22,9 +20,6 @@ public class Player {
 
     @EqualsAndHashCode.Include
     private String username;
-
-    @JsonIgnore
-    private Invoker invoker;
 
     private int gold;
 
@@ -56,24 +51,9 @@ public class Player {
         //TODO: initiate fight mode if there is already a player in the room.
         //Or pick a room with no players.
 
-        player.setInvoker(new GameInvoker(game, player));
         player.setGold(game.getGold());
-
         player.setUsername(username);
         return player;
-    }
-
-    public String execute(String line) {
-
-        String[] parts = line
-                .trim()
-                .toLowerCase()
-                .split("\\s+", 2);
-
-        if(parts.length > 1)
-            return invoker.execute(parts[0], parts[1].split("\\s+"));
-
-        return invoker.execute(parts[0]);
     }
 
     public boolean addItem(Item item) {

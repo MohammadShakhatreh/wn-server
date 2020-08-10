@@ -1,6 +1,6 @@
 package com.worldnavigator.web.security;
 
-import com.worldnavigator.web.jwt.JwtConfig;
+import com.worldnavigator.web.jwt.JwtConfiguration;
 import com.worldnavigator.web.jwt.JwtConfigurer;
 import com.worldnavigator.web.services.UserService;
 import io.jsonwebtoken.io.Decoders;
@@ -25,15 +25,15 @@ import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
-@EnableConfigurationProperties(JwtConfig.class)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableConfigurationProperties(JwtConfiguration.class)
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final JwtConfig jwtConfig;
+    private final JwtConfiguration jwtConfiguration;
     private final UserService userService;
 
     @Autowired
-    public SecurityConfig(JwtConfig jwtConfig, UserService userService) {
-        this.jwtConfig = jwtConfig;
+    public SecurityConfiguration(JwtConfiguration jwtConfiguration, UserService userService) {
+        this.jwtConfiguration = jwtConfiguration;
         this.userService = userService;
     }
 
@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
-            .apply(new JwtConfigurer(jwtConfig, secretKey(), userDetailsService()));
+            .apply(new JwtConfigurer(jwtConfiguration, secretKey(), userDetailsService()));
 
         // Authentication endpoints security
         http
@@ -88,6 +88,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public SecretKey secretKey() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtConfig.getSecret()));
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtConfiguration.getSecret()));
     }
 }

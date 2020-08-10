@@ -2,6 +2,7 @@ package com.worldnavigator.web.controllers;
 
 import com.worldnavigator.game.Game;
 import com.worldnavigator.game.Player;
+import com.worldnavigator.game.controls.Command;
 import com.worldnavigator.web.dto.ExecutionRequest;
 import com.worldnavigator.web.dto.ExecutionResponse;
 import com.worldnavigator.web.dto.NewGameRequest;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -50,9 +52,7 @@ public class GameController {
 
     @PostMapping("{uuid}/execute")
     public ExecutionResponse execute(
-            User user,
-            @PathVariable String uuid,
-            @Valid @RequestBody ExecutionRequest request
+            User user, @PathVariable String uuid, @Valid @RequestBody ExecutionRequest request
     ) {
         return new ExecutionResponse(gameService.execute(uuid, user, request));
     }
@@ -75,5 +75,16 @@ public class GameController {
 
         game.distributePlayerGold(player);
         game.dropPlayerItems(player);
+    }
+
+    @GetMapping("{uuid}/commands")
+    public List<Command> commands(@PathVariable String uuid, User user) {
+        return gameService.getAvailableCommands(uuid, user);
+    }
+
+    @GetMapping("{uuid}/players")
+    public Collection<Player> players(@PathVariable String uuid) {
+        Game game = gameService.getGame(uuid);
+        return game.getPlayers().values();
     }
 }

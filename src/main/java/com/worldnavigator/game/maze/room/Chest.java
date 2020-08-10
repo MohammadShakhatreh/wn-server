@@ -7,6 +7,7 @@ import com.worldnavigator.game.maze.items.Item;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public final class Chest extends RoomSide implements Lockable {
 
@@ -25,6 +26,9 @@ public final class Chest extends RoomSide implements Lockable {
 
         this.lock = lock;
 
+        if(gold < 0)
+            throw new IllegalArgumentException("Gold must be non-negative number");
+
         this.gold = gold;
         this.isCollected = false;
         this.items = Objects.requireNonNull(items);
@@ -36,8 +40,8 @@ public final class Chest extends RoomSide implements Lockable {
     }
 
     @Override
-    public Lock getLock() {
-        return lock;
+    public Optional<Lock> getLock() {
+        return Optional.ofNullable(lock);
     }
 
     public void setCollected(boolean collected) {

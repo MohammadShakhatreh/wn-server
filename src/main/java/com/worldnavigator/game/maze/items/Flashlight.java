@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 public final class Flashlight extends Item {
+
+    @JsonIgnore
     private boolean isOn;
 
     @JsonCreator
@@ -17,11 +19,10 @@ public final class Flashlight extends Item {
         return visitor.execute(this);
     }
 
-    public void setOn(boolean isOn) {
-        this.isOn = isOn;
+    public void flip() {
+        this.isOn = !isOn;
     }
 
-    @JsonIgnore
     public boolean isOn() {
         return isOn;
     }

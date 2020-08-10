@@ -2,10 +2,12 @@ package com.worldnavigator.web.services;
 
 import com.worldnavigator.game.Game;
 import com.worldnavigator.game.Player;
+import com.worldnavigator.game.controls.Command;
+import com.worldnavigator.game.controls.Invoker;
+import com.worldnavigator.game.controls.PlayerContext;
 import com.worldnavigator.web.dto.ExecutionRequest;
 import com.worldnavigator.web.dto.NewGameRequest;
 import com.worldnavigator.web.entities.User;
-import com.worldnavigator.web.repositories.MazeTemplateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,32 +17,14 @@ import java.util.*;
 @Service
 public class GameService {
 
+    private final Invoker invoker;
+
     private final Map<UUID, Game> games;
-    private final MazeTemplateRepository mazeTemplateRepository;
 
     @Autowired
-    public GameService(MazeTemplateRepository mazeTemplateRepository) {
+    public GameService(Invoker invoker) {
+        this.invoker = invoker;
         this.games = new HashMap<>();
-        this.mazeTemplateRepository = mazeTemplateRepository;
-    }
-
-    public Player addPlayer(String uuid, User user) {
-        Game game = games.get(UUID.fromString(uuid));
-
-        if(game == null)
-            throw new NoSuchElementException("There is no game with this uuid.");
-
-        if(game.isStarted())
-            throw new IllegalStateException("The game started you can't join.");
-
-        Map<String, Player> players = game.getPlayers();
-        if(players.containsKey(user.getUsername()))
-            throw new IllegalArgumentException("There is already a player with this name.");
-
-        Player player = Player.of(game, user.getUsername());
-        players.put(user.getUsername(), player);
-
-        return player;
     }
 
     public Game create(User user, NewGameRequest request) {
@@ -57,37 +41,68 @@ public class GameService {
                 startedAt
         );
 
-        var players = game.getPlayers();
+        Map<String, Player> players = game.getPlayers();
         players.put(user.getUsername(), Player.of(game, user.getUsername()));
 
-        return games.putIfAbsent(uuid, game);
+        games.putIfAbsent(uuid, game);
+        return game;
     }
 
-    public Game getGame(String uuid) {
-        return games.get(UUID.fromString(uuid));
-    }
-
-    public Map<UUID, Game> getGames() {
-        return games;
-    }
-
-    public String execute(String uuid, User user, ExecutionRequest request) {
+    public Player addPlayer(String uuid, User user) {
         Game game = games.get(UUID.fromString(uuid));
 
         if(game == null)
             throw new NoSuchElementException("There is no game with this uuid.");
 
+        if(game.isStarted())
+            throw new IllegalStateException("The game started you can't join.");
+
         if(game.isFinished())
-            return "The game is finished and " +
-                    (game.getWinner() == null ? "there is no winner" : "the winner is " + game.getWinner());
+            throw new IllegalStateException("The game has finished you can't join");
 
-        Player player = game.getPlayers().get(user.getUsername());
+        Map<String, Player> players = game.getPlayers();
 
-        if(player == null)
-            throw new NoSuchElementException("You are not in this game.");
+        if(players.containsKey(user.getUsername()))
+            throw new IllegalArgumentException("There is already a player with this name.");
 
+        Player player = Player.of(game, user.getUsername());
+        players.put(user.getUsername(), player);
 
+        return player;
+    }
 
-        return player.execute(request.getLine());
+    public String execute(String uuid, User user, ExecutionRequest request) {
+        return invoker.execute(getPlayerContext(uuid, user), request.getLine());
+    }
+
+    public List<Command> getAvailableCommands(String uuid, User user) {
+        return invoker.getAvailableCommands(getPlayerContext(uuid, user));
+    }
+
+    private PlayerContext getPlayerContext(String uuid, User user) {
+
+        Game game = getGame(uuid);
+
+        if(game.isFinished())
+            throw new IllegalStateException(
+                    "The game is finished and " +
+                    (game.getWinner() == null ? "there is no winner" : "the winner is " + game.getWinner())
+            );
+
+        Player player = game.getPlayer(user.getUsername());
+        return new PlayerContext(game, player);
+    }
+
+    public Game getGame(String uuid) {
+        Game game = games.get(UUID.fromString(uuid));
+
+        if(game == null)
+            throw new NoSuchElementException("There is no game with that uuid.");
+
+        return game;
+    }
+
+    public Map<UUID, Game> getGames() {
+        return games;
     }
 }

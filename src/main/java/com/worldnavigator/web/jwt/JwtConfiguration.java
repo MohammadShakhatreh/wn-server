@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 @Getter
 @ConstructorBinding
 @ConfigurationProperties(prefix = "application.jwt")
-public class JwtConfig {
+public class JwtConfiguration {
 
     private final String prefix;
 
@@ -16,7 +16,7 @@ public class JwtConfig {
 
     private final int expireInDays;
 
-    public JwtConfig(
+    public JwtConfiguration(
             @DefaultValue("Bearer") String prefix,
             String secret,
             @DefaultValue("14") int expireInDays

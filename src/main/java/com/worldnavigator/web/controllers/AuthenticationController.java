@@ -1,6 +1,6 @@
 package com.worldnavigator.web.controllers;
 
-import com.worldnavigator.web.jwt.JwtConfig;
+import com.worldnavigator.web.jwt.JwtConfiguration;
 import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,18 +24,19 @@ import static java.util.Date.from;
 @RequestMapping("auth")
 public class AuthenticationController {
 
-    private final JwtConfig jwtConfig;
+    private final JwtConfiguration jwtConfiguration;
     private final SecretKey secretKey;
 
     private final AuthenticationManager authenticationManager;
 
     @Autowired
     public AuthenticationController(
-            JwtConfig jwtConfig,
+            JwtConfiguration jwtConfiguration,
             SecretKey secretKey,
-            AuthenticationManager authenticationManager) {
+            AuthenticationManager authenticationManager
+    ) {
 
-        this.jwtConfig = jwtConfig;
+        this.jwtConfiguration = jwtConfiguration;
         this.secretKey = secretKey;
         this.authenticationManager = authenticationManager;
     }
@@ -55,7 +56,7 @@ public class AuthenticationController {
         String token = Jwts.builder()
                 .setSubject(authentication.getName())
                 .setIssuedAt(from(now))
-                .setExpiration(from(now.plus(jwtConfig.getExpireInDays(), ChronoUnit.DAYS)))
+                .setExpiration(from(now.plus(jwtConfiguration.getExpireInDays(), ChronoUnit.DAYS)))
                 .signWith(secretKey)
                 .compact();
 
