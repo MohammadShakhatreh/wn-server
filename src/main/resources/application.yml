@@ -1,8 +1,11 @@
+server:
+  port: 5000
+
 spring:
   datasource:
-    url: jdbc:postgresql://192.168.8.2:5432/wn
+    url: jdbc:postgresql://world-navigator-db.cxky9eesblfs.eu-central-1.rds.amazonaws.com:5432/world_navigator
     username: postgres
-    password:
+    password: OTL4krLJaCPZipkPTUEK
   jpa:
     hibernate:
       ddl-auto: update
@@ -10,4 +13,4 @@ spring:
 application:
   jwt:
     secret: yQ9H5OcEwqSenBrRBOg01nLwRBEXk3OAZcHA6GWwb2M=
-    expire-in-days: 90
+    expire-in-days: 30
