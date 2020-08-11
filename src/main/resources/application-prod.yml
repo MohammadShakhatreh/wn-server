@@ -1,0 +1,16 @@
+server:
+  port: 80
+
+spring:
+  datasource:
+    url: jdbc:postgresql://world-navigator-db.cxky9eesblfs.eu-central-1.rds.amazonaws.com:5432/world_navigator
+    username: postgres
+    password: OTL4krLJaCPZipkPTUEK
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+application:
+  jwt:
+    secret: yQ9H5OcEwqSenBrRBOg01nLwRBEXk3OAZcHA6GWwb2M=
+    expire-in-days: 30
