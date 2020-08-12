@@ -1,9 +1,11 @@
 package com.worldnavigator.game.controls.commands;
 
-import com.worldnavigator.game.controls.visitors.CheckVisitor;
+import com.worldnavigator.game.Player;
+import com.worldnavigator.game.PlayerMode;
 import com.worldnavigator.game.controls.Command;
 import com.worldnavigator.game.controls.PlayerContext;
-import com.worldnavigator.game.maze.room.RoomSide;
+import com.worldnavigator.game.controls.visitors.CheckVisitor;
+import com.worldnavigator.game.maze.roomsides.RoomSide;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,6 +16,12 @@ public class Check implements Command {
 
         RoomSide side = context.getCurrentRoomSide();
         return side.accept(new CheckVisitor(context.getPlayer()));
+    }
+
+    @Override
+    public boolean available(PlayerContext context) {
+        Player player = context.getPlayer();
+        return player.getMode() == PlayerMode.WALKING;
     }
 
     @Override

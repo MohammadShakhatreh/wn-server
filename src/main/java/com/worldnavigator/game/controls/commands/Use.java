@@ -1,9 +1,10 @@
 package com.worldnavigator.game.controls.commands;
 
 import com.worldnavigator.game.Player;
+import com.worldnavigator.game.PlayerMode;
 import com.worldnavigator.game.controls.Command;
-import com.worldnavigator.game.controls.visitors.UseVisitor;
 import com.worldnavigator.game.controls.PlayerContext;
+import com.worldnavigator.game.controls.visitors.UseVisitor;
 import com.worldnavigator.game.maze.items.Item;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +35,8 @@ public class Use implements Command {
 
     @Override
     public boolean available(PlayerContext context) {
-        return true;
+        Player player = context.getPlayer();
+        return player.getMode() == PlayerMode.WALKING;
     }
 
     @Override

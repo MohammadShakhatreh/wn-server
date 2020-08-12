@@ -1,21 +1,18 @@
 package com.worldnavigator.game.controls.commands;
 
+import com.worldnavigator.game.Player;
+import com.worldnavigator.game.PlayerMode;
 import com.worldnavigator.game.controls.Command;
 import com.worldnavigator.game.controls.PlayerContext;
-import com.worldnavigator.game.maze.room.Lock;
-import com.worldnavigator.game.maze.room.Lockable;
-import com.worldnavigator.game.maze.room.RoomSide;
+import com.worldnavigator.game.maze.roomsides.Lock;
+import com.worldnavigator.game.maze.roomsides.Lockable;
+import com.worldnavigator.game.maze.roomsides.RoomSide;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
 public class Open implements Command {
-
-    @Override
-    public boolean validate(PlayerContext context, String... args) {
-        return true;
-    }
 
     @Override
     public String execute(PlayerContext context, String... args) {
@@ -48,8 +45,11 @@ public class Open implements Command {
 
     @Override
     public boolean available(PlayerContext context) {
+        Player player = context.getPlayer();
         RoomSide side = context.getCurrentRoomSide();
-        return side instanceof Lockable;
+
+        return player.getMode() == PlayerMode.WALKING
+                && side instanceof Lockable;
     }
 
     @Override

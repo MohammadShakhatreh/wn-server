@@ -10,10 +10,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class AuthenticationControllerAdvice extends ResponseEntityExceptionHandler {
+public class AuthenticationControllerAdvice {
 
     @ModelAttribute
     public User principal(Authentication authentication) {

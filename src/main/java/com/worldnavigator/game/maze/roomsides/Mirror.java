@@ -1,4 +1,4 @@
-package com.worldnavigator.game.maze.room;
+package com.worldnavigator.game.maze.roomsides;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,13 +6,13 @@ import com.worldnavigator.game.maze.items.Item;
 
 import java.util.Optional;
 
-public final class Painting extends RoomSide implements HiddenItem {
+public final class Mirror extends RoomSide implements HiddenItem {
 
     private final Item item;
     private boolean isCollected;
 
     @JsonCreator
-    public Painting(
+    public Mirror(
             @JsonProperty("item") Item item
     ) {
         this.item = item;
@@ -41,6 +41,6 @@ public final class Painting extends RoomSide implements HiddenItem {
 
     @Override
     public String toString() {
-        return "Painting";
+        return "Mirror";
     }
 }

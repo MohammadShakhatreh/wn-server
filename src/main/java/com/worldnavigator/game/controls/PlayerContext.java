@@ -2,8 +2,8 @@ package com.worldnavigator.game.controls;
 
 import com.worldnavigator.game.Game;
 import com.worldnavigator.game.Player;
-import com.worldnavigator.game.maze.room.Room;
-import com.worldnavigator.game.maze.room.RoomSide;
+import com.worldnavigator.game.maze.Room;
+import com.worldnavigator.game.maze.roomsides.RoomSide;
 
 public final class PlayerContext {
 

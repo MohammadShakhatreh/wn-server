@@ -1,10 +1,9 @@
-package com.worldnavigator.game.maze.room;
+package com.worldnavigator.game.maze.roomsides;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.worldnavigator.game.maze.items.Item;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -53,7 +52,7 @@ public final class Chest extends RoomSide implements Lockable {
     }
 
     public List<Item> getItems() {
-        return Collections.unmodifiableList(items);
+        return items;
     }
 
     public boolean isCollected() {

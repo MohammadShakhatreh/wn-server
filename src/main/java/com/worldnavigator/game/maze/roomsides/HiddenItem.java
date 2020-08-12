@@ -1,4 +1,4 @@
-package com.worldnavigator.game.maze.room;
+package com.worldnavigator.game.maze.roomsides;
 
 import com.worldnavigator.game.maze.items.Item;
 

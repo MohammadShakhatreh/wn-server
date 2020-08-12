@@ -62,6 +62,7 @@ public interface Command {
      * For example: "move &lt;forward|backward&gt;"
      * @return how to call the command
      */
+    @JsonProperty("usage")
     default String usage() {
         String arguments = args();
 

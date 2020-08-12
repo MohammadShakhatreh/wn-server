@@ -1,32 +1,32 @@
 package com.worldnavigator.game;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.worldnavigator.game.fight.Fight;
 import com.worldnavigator.game.maze.Maze;
-import com.worldnavigator.game.maze.room.Room;
+import com.worldnavigator.game.maze.Room;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
-@Setter
 public class Game {
 
     private final UUID uuid;
 
     private final String name;
 
-    @JsonIgnore
-    private final Maze maze;
-
     private final String owner;
 
-    @JsonIgnore
+
+    private String winner;
+
+    private final Maze maze;
+
+    private final Map<Player, Fight> fights;
+
     private final Map<String, Player> players;
+
 
     private final int gold;
 
@@ -34,14 +34,13 @@ public class Game {
 
     private final LocalDateTime startedAt;
 
-    private String winner;
-
     public Game(UUID uuid, String owner, String name, Maze maze, int gold, int timeout, LocalDateTime startedAt) {
         this.uuid = uuid;
         this.maze = maze;
         this.name = name;
         this.owner = owner;
         this.winner = null;
+        this.fights = new HashMap<>();
         this.players = new HashMap<>();
 
         this.gold = gold;
@@ -49,18 +48,27 @@ public class Game {
         this.startedAt = startedAt;
     }
 
+    public Fight getFightByPlayer(Player player) {
+        return fights.get(player);
+    }
+
+    public void addFight(Fight fight) {
+        fight.getPlayers().forEach(player -> fights.put(player, fight));
+    }
+
     public void distributePlayerGold(Player player) {
-        int goldForEachPlayer = player.getGold() / players.size();
-        players.forEach((s, p) -> p.setGold(p.getGold() + goldForEachPlayer));
+
+        List<Player> notLostPlayers = this.players.values().stream()
+                .filter(p -> p.getMode() != PlayerMode.LOST)
+                .collect(Collectors.toList());
+
+        int goldForEachPlayer = player.getGold() / notLostPlayers.size();
+        notLostPlayers.forEach(p -> p.setGold(p.getGold() + goldForEachPlayer));
     }
 
     public void dropPlayerItems(Player player) {
         Room room = maze.getRoom(player.getLocation());
         room.addItems(player.getItems());
-    }
-
-    public void removePlayer(Player player) {
-        this.players.remove(player.getUsername());
     }
 
     /**
@@ -78,21 +86,23 @@ public class Game {
         return player;
     }
 
-    /**
-     * See if the game has finished or not depending on if there is a winner or
-     * the game has timed out.
-     *
-     */
     public boolean isFinished() {
-        return winner != null
-                || startedAt.plusMinutes(timeout).isBefore(LocalDateTime.now());
+        return winner != null || isTimeout();
     }
 
-    /**
-     * See if The has started or not.
-     *
-     */
     public boolean isStarted() {
         return LocalDateTime.now().isAfter(startedAt);
+    }
+
+    public boolean isTimeout() {
+        return startedAt.plusMinutes(timeout).isBefore(LocalDateTime.now());
+    }
+
+    public void setWinner(Player player) {
+
+        this.players.forEach((s, p) -> p.setMode(PlayerMode.LOST));
+        player.setMode(PlayerMode.WON);
+
+        this.winner = player.getUsername();
     }
 }

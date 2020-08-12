@@ -1,12 +1,14 @@
 package com.worldnavigator.game.controls.commands;
 
+import com.worldnavigator.game.Player;
+import com.worldnavigator.game.PlayerMode;
 import com.worldnavigator.game.controls.Command;
-import com.worldnavigator.game.controls.visitors.LookVisitor;
 import com.worldnavigator.game.controls.PlayerContext;
+import com.worldnavigator.game.controls.visitors.LookVisitor;
+import com.worldnavigator.game.maze.Room;
 import com.worldnavigator.game.maze.items.Flashlight;
 import com.worldnavigator.game.maze.items.Item;
-import com.worldnavigator.game.maze.room.Room;
-import com.worldnavigator.game.maze.room.RoomSide;
+import com.worldnavigator.game.maze.roomsides.RoomSide;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -39,7 +41,8 @@ public class Look implements Command {
 
     @Override
     public boolean available(PlayerContext context) {
-        return true;
+        Player player = context.getPlayer();
+        return player.getMode() == PlayerMode.WALKING;
     }
 
     @Override

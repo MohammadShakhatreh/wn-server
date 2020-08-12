@@ -3,9 +3,9 @@ package com.worldnavigator.game.controls.visitors;
 import com.worldnavigator.game.maze.items.Flashlight;
 import com.worldnavigator.game.maze.items.ItemVisitor;
 import com.worldnavigator.game.maze.items.Key;
-import com.worldnavigator.game.maze.room.Lock;
-import com.worldnavigator.game.maze.room.Lockable;
-import com.worldnavigator.game.maze.room.RoomSide;
+import com.worldnavigator.game.maze.roomsides.Lock;
+import com.worldnavigator.game.maze.roomsides.Lockable;
+import com.worldnavigator.game.maze.roomsides.RoomSide;
 
 import java.util.Optional;
 

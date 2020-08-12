@@ -1,8 +1,10 @@
 package com.worldnavigator.game.controls.commands;
 
+import com.worldnavigator.game.Player;
+import com.worldnavigator.game.PlayerMode;
 import com.worldnavigator.game.controls.Command;
 import com.worldnavigator.game.controls.PlayerContext;
-import com.worldnavigator.game.maze.room.Room;
+import com.worldnavigator.game.maze.Room;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,6 +22,12 @@ public class SwitchLights implements Command {
 
         return "The room doesn't have lights!\n"
                 + "You should use a flashlight to see.";
+    }
+
+    @Override
+    public boolean available(PlayerContext context) {
+        Player player = context.getPlayer();
+        return player.getMode() == PlayerMode.WALKING;
     }
 
     @Override

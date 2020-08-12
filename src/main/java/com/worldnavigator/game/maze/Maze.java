@@ -2,7 +2,6 @@ package com.worldnavigator.game.maze;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.worldnavigator.game.maze.room.Room;
 
 import java.util.List;
 

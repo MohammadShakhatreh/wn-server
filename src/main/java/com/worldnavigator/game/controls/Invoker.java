@@ -2,6 +2,7 @@ package com.worldnavigator.game.controls;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -14,11 +15,17 @@ import static java.util.stream.Collectors.toMap;
 /**
  * Collects and registers commands
  */
+@Component
 public final class Invoker {
 
     private Map<String, Command> commands;
 
     private ApplicationContext applicationContext;
+
+    @Autowired
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
     @PostConstruct
     public void collect() {
@@ -56,19 +63,10 @@ public final class Invoker {
         return String.format("The command (%s) doesn't exists!", parts[0]);
     }
 
-    public Map<String, Command> getCommands() {
-        return commands;
-    }
-
     public List<Command> getAvailableCommands(PlayerContext context) {
         return commands.values()
                 .stream()
                 .filter(c -> c.available(context))
                 .collect(toList());
-    }
-
-    @Autowired
-    public void setApplicationContext(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
     }
 }

@@ -1,4 +1,4 @@
-package com.worldnavigator.game.maze.room;
+package com.worldnavigator.game.maze.roomsides;
 
 public interface RoomSideVisitor {
 

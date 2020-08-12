@@ -3,51 +3,59 @@ package com.worldnavigator.web.controllers;
 import com.worldnavigator.game.Game;
 import com.worldnavigator.game.Player;
 import com.worldnavigator.game.controls.Command;
-import com.worldnavigator.web.dto.ExecutionRequest;
-import com.worldnavigator.web.dto.ExecutionResponse;
-import com.worldnavigator.web.dto.NewGameRequest;
+import com.worldnavigator.web.dto.*;
 import com.worldnavigator.web.entities.User;
+import com.worldnavigator.web.mappers.GameMapper;
 import com.worldnavigator.web.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("games")
 public class GameController {
 
+    private final GameMapper gameMapper;
+
     private final GameService gameService;
 
     @Autowired
-    public GameController(GameService gameService) {
+    public GameController(GameMapper gameMapper, GameService gameService) {
+        this.gameMapper = gameMapper;
         this.gameService = gameService;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Game create(User user, @Valid @RequestBody NewGameRequest request) {
-        return gameService.create(user, request);
+    public GameInfo create(User user, @Valid @RequestBody NewGameRequest request) {
+        Game game = gameService.create(user, request);
+        return gameMapper.toGameInfo(game);
     }
 
     @GetMapping("{uuid}")
-    public Game retrieve(@PathVariable String uuid) {
-        return gameService.getGame(uuid);
+    public GameInfo retrieve(@PathVariable String uuid) {
+        Game game = gameService.getGame(uuid);
+        return gameMapper.toGameInfo(game);
     }
 
     @GetMapping
-    public Collection<Game> list() {
-        return gameService.getGames().values();
+    public List<GameInfo> list() {
+        return gameService.getGames().values()
+                .stream()
+                .map(gameMapper::toGameInfo)
+                .collect(toList());
     }
 
     @PostMapping("{uuid}/join")
     @ResponseStatus(HttpStatus.CREATED)
-    public Player join(@PathVariable String uuid, User user) {
-        return gameService.addPlayer(uuid, user);
+    public PlayerInfo join(@PathVariable String uuid, User user) {
+        Player player = gameService.createPlayer(uuid, user);
+        return gameMapper.toPlayerInfo(player);
     }
 
     @PostMapping("{uuid}/execute")
@@ -58,23 +66,9 @@ public class GameController {
     }
 
     @GetMapping("{uuid}/status")
-    public Player status(@PathVariable String uuid, User user) {
-        Game game = gameService.getGame(uuid);
-        Map<String, Player> players = game.getPlayers();
-
-        return players.get(user.getUsername());
-    }
-
-    @PostMapping("{uuid}/quit")
-    public void quit(@PathVariable String uuid, User user) {
-        Game game = gameService.getGame(uuid);
-        Map<String, Player> players = game.getPlayers();
-
-        Player player = players.get(user.getUsername());
-        players.remove(user.getUsername());
-
-        game.distributePlayerGold(player);
-        game.dropPlayerItems(player);
+    public PlayerInfo status(@PathVariable String uuid, User user) {
+        Player player = gameService.getPlayer(uuid, user);
+        return gameMapper.toPlayerInfo(player);
     }
 
     @GetMapping("{uuid}/commands")
@@ -83,8 +77,11 @@ public class GameController {
     }
 
     @GetMapping("{uuid}/players")
-    public Collection<Player> players(@PathVariable String uuid) {
+    public List<PlayerInfo> players(@PathVariable String uuid) {
         Game game = gameService.getGame(uuid);
-        return game.getPlayers().values();
+        return game.getPlayers().values()
+                .stream()
+                .map(gameMapper::toPlayerInfo)
+                .collect(toList());
     }
 }

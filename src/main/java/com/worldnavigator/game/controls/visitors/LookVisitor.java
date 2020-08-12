@@ -1,6 +1,6 @@
 package com.worldnavigator.game.controls.visitors;
 
-import com.worldnavigator.game.maze.room.*;
+import com.worldnavigator.game.maze.roomsides.*;
 
 public class LookVisitor implements RoomSideVisitor {
 

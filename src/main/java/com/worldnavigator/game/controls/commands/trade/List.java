@@ -1,14 +1,14 @@
-package com.worldnavigator.game.controls.commands;
+package com.worldnavigator.game.controls.commands.trade;
 
 import com.worldnavigator.game.controls.Command;
 import com.worldnavigator.game.controls.PlayerContext;
-import com.worldnavigator.game.maze.room.Seller;
+import com.worldnavigator.game.maze.roomsides.Seller;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 @Component
-public final class TradeList implements Command {
+public final class List implements Command {
 
     @Override
     public boolean validate(PlayerContext context, String... args) {

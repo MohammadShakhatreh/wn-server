@@ -1,4 +1,4 @@
-package com.worldnavigator.game.controls.commands;
+package com.worldnavigator.game.controls.commands.trade;
 
 import com.worldnavigator.game.Player;
 import com.worldnavigator.game.controls.Command;
@@ -6,12 +6,12 @@ import com.worldnavigator.game.controls.PlayerContext;
 import com.worldnavigator.game.maze.items.Item;
 import com.worldnavigator.game.maze.items.ItemFactory;
 import com.worldnavigator.game.maze.items.NoSuchItemException;
-import com.worldnavigator.game.maze.room.RoomSide;
-import com.worldnavigator.game.maze.room.Seller;
+import com.worldnavigator.game.maze.roomsides.RoomSide;
+import com.worldnavigator.game.maze.roomsides.Seller;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class TradeBuy implements Command {
+public final class Buy implements Command {
 
     @Override
     public boolean validate(PlayerContext context, String... args) {

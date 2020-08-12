@@ -1,6 +1,7 @@
 package com.worldnavigator.game.controls.commands;
 
 import com.worldnavigator.game.Player;
+import com.worldnavigator.game.PlayerMode;
 import com.worldnavigator.game.controls.Command;
 import com.worldnavigator.game.controls.PlayerContext;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,8 @@ public class Rotate implements Command {
 
     @Override
     public boolean available(PlayerContext context) {
-        return true;
+        Player player = context.getPlayer();
+        return player.getMode() == PlayerMode.WALKING;
     }
 
     @Override

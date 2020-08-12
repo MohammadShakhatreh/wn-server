@@ -2,7 +2,7 @@ package com.worldnavigator.game.controls.visitors;
 
 import com.worldnavigator.game.Player;
 import com.worldnavigator.game.maze.items.Item;
-import com.worldnavigator.game.maze.room.*;
+import com.worldnavigator.game.maze.roomsides.*;
 
 import java.util.Optional;
 
