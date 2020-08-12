@@ -1,63 +1,60 @@
 # World Navigator
 
-## TODO List
-
-- Simple frontend for the game
-- Implement CI/CD with Jenkins
+A Multi-player text adventure game.
 
 ## Packaging and running 
 
 To get an executable jar file
 
 ```
-$ maven package
+$ mvn clean package
 ```
 
 After that you can run the game using
 
-Giving that the `maze.json` is in the same directory as the jar file.
 ```
-$ java -jar world-navigator-0.0.1-jar-with-dependencies.jar
+$ java -jar app.jar
 ```
 
-## Postman Collection for the api
+## Postman API Collection
 
-[Postman Collection](https://www.getpostman.com/collections/1a288a49ef9f5aed7ada)
+To see all the endpoints and test them use this 
+[Postman Collection](https://www.getpostman.com/collections/1a288a49ef9f5aed7ada).
 
 ## Maze Specification
 
-The maze file is a `json` file and here is the specification to write your own maze.
+The maze specification to write your own maze.
 
-### Maze object
+### Maze Object
 First the top level object will hold the properties for the maze.
 
-```
+```json
 {
-  "rooms": [ Room ], // Array of rooms that will be in the maze.
+  "rooms": [ Room ]
 }
 ```
 
-### Room object
+### Room Object
 
-```
+```json
 {
+  "index": Number,  
   "sides" : { // defines what the four walls of the room will be.
-    "NORTH" : { RoomSide },
-    "EAST" : { RoomSide },
-    "SOUTH" : { RoomSide },
-    "WEST" : { RoomSide }
+    "NORTH" : RoomSide,
+    "EAST" : RoomSide,
+    "SOUTH" : RoomSide,
+    "WEST" : RoomSide
   },
-  "lit" : true, // If the room is lit or not.
-  "hasLights": true // If the room has lights.
-                    // if this is false so does the lit property.
+  "lit" : true,
+  "hasLights": true 
 }
 ```
 
-### RoomSide object
+### RoomSide Object
 
-There are for types of a wall
+There are four types of walls.
 
-#### Empty wall
+#### Wall
 
 ```json
 {
@@ -67,17 +64,17 @@ There are for types of a wall
 
 #### Door
 
-```
+```json
 {
   "@type": "door",
-  "room": Number // next room index 
+  "room": Number // next room index or -1 to indecate special door to win.
   "lock": Lock | Number // if Number then it's a predefined lock id 
 }
 ```
 
 #### Chest
 
-```
+```json
 {
     "@type": "chest",
     "lock": Lock | Number // as in the door object
@@ -92,10 +89,10 @@ There are for types of a wall
 
 #### Seller
 
-```
+```json
 {
   "@type": "seller",
-  "prices": { // prices list.
+  "prices": {
     "flashlight": 20, // The description of the item and it's price.
     "blue key": 120,
     "brown key": 200
@@ -105,11 +102,10 @@ There are for types of a wall
 
 #### Mirror and Painting
 
-```
+```json
 {
   "@type" : "painting", // or "mirror" to define a mirror.
-  "item": "brown key"    // The hidden item, if there is no item hidden this proprty can be
-                                                negelected.
+  "item": "brown key"
 }
 ```
 
@@ -117,10 +113,11 @@ There are for types of a wall
 
 Applicable for `Door` or `Chest` Objects. 
 
-```
+```json
 {
     "lock": {
-        "key": "blue key", // optional if the lock is always unlocked
+        "@id": Number, // used to refernce the same lock in any place
+        "key": "blue key",
         "open": Boolean,
         "locked": Boolean
     }
@@ -131,7 +128,7 @@ Applicable for `Door` or `Chest` Objects.
 
 Items are defined by a string representing the item description.
 
-There are two items in the game.
+There are two items in the game `flashlight` and `key`.
 
 #### Flashlight
 
