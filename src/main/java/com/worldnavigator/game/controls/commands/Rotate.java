@@ -7,7 +7,7 @@ import com.worldnavigator.game.controls.PlayerContext;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Rotate implements Command {
+public final class Rotate implements Command {
 
     @Override
     public boolean validate(PlayerContext context, String... args) {

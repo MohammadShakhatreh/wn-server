@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-public class Look implements Command {
+public final class Look implements Command {
 
     @Override
     public boolean validate(PlayerContext context, String... args) {

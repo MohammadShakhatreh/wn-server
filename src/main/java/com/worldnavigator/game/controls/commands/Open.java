@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class Open implements Command {
+public final class Open implements Command {
 
     @Override
     public String execute(PlayerContext context, String... args) {

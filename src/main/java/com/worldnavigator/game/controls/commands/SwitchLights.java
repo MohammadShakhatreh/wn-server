@@ -8,7 +8,7 @@ import com.worldnavigator.game.maze.Room;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SwitchLights implements Command {
+public final class SwitchLights implements Command {
 
     @Override
     public String execute(PlayerContext context, String... args) {

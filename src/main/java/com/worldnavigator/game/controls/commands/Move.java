@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
-public class Move implements Command {
+public final class Move implements Command {
 
     @Override
     public boolean validate(PlayerContext context, String... args) {

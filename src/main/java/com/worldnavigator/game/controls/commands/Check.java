@@ -9,7 +9,7 @@ import com.worldnavigator.game.maze.roomsides.RoomSide;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Check implements Command {
+public final class Check implements Command {
 
     @Override
     public String execute(PlayerContext context, String... args) {

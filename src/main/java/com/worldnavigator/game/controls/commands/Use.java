@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-public class Use implements Command {
+public final class Use implements Command {
     @Override
     public boolean validate(PlayerContext context, String... args) {
         return args.length >= 1;

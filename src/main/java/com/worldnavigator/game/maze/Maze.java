@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class Maze {
+public final class Maze {
 
     private final List<Room> rooms;
 

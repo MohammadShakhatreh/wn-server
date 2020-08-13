@@ -12,18 +12,15 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
-/**
- * Collects and registers commands
- */
 @Component
 public final class Invoker {
 
     private Map<String, Command> commands;
 
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     @Autowired
-    public void setApplicationContext(ApplicationContext applicationContext) {
+    public Invoker(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
@@ -33,9 +30,7 @@ public final class Invoker {
 
         this.commands = beans.values()
                 .stream()
-                .collect(
-                        toMap(Command::name, identity())
-                );
+                .collect(toMap(Command::name, identity()));
     }
 
     public String execute(PlayerContext context, String line) {

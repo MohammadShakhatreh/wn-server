@@ -13,7 +13,7 @@ import java.util.Objects;
 @Setter
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Player {
+public final class Player {
 
     @EqualsAndHashCode.Include
     private String username;

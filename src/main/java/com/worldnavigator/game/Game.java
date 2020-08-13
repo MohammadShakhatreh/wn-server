@@ -11,7 +11,7 @@ import java.util.*;
 import static java.util.stream.Collectors.toList;
 
 @Getter
-public class Game {
+public final class Game {
 
     private final UUID uuid;
 

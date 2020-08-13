@@ -346,12 +346,15 @@ Used to implement the various commands of the game
 
 ## Facade Pattern
 
+The `Invoker` class is sort of a facade where it provides an interface to interact with
+all the game commands.
 
 # SOLID Principles
 
 ## Single-Responsibility Principle
 
-For example the `Player` class has a responsibility to store the state of the player.
+For example the `Player` class has a responsibility to store the state of the player and
+the `Fight` class has the responsibility to represent a fight.
 
 ## Open-Closed Principle
 
@@ -367,41 +370,47 @@ Because the player is expecting something when they run the command that uses a 
 
 ## Liskov substitution principle
 
-In the `Command` interface and the `Shell` 
+All subclasses in the project can be substitutable.
 
-The `Shell` class is a substitutable of `Command` interface, and this is proofed because
-in the shells commads list can have concrete commands like `UseCommand` or it can be a `Shell`
-like the `TradeShell` in the `GlobalShell`.
+For example in the `Command` interface all commands are referenced and used in the `Invoker `
+using the interface.
 
 ## Interface segregation principle
 
 Based on this principle I made `Lockable` and `HiddenItem` interfaces
-because not all `RoomSide` subclasses are openable like the `Chest`
+because not all `RoomSide` subclasses are lockable like the `Chest`
 and `Door` classes, and not all subclasses have hidden items like 
-`Painting` and `Mirror`,
+`Painting` and `Mirror`.
 
 ## Dependency Inversion principle
 
-For example in the `Invoker` class it depends on the `Command` and
+I used spring IoC mechanism to instantiate objects and provide them 
+with their required dependencies, for example ``
+
+In the `Invoker` class it depends on the `Command` and
 `Map` interfaces, and these are abstractions.
 
-And when ever I need a list or a map I define them by their interfaces `List` and `Map`.
+And when ever I need a list or a map I define 
+them by their interfaces `List` and `Map`.
+
+# Concurrency Issues
+
+I used synchronization in the `Move` command as the player must remove themselves from the 
+current room and add themselves to the destination room so these two rooms must be synced
+so no player will interfere with the transition of the player.
+
+I also synced the `FightResolver` so that if the two player played at the same time this will
+make an issue.
 
 # Data Structures
 
-In `Shell` class I used a Map to store the commands, where the command
+In `Invoker` class I used a Map to store the commands, where the command
 name is the key and the command itself is the value, I used the Map
 because it's fast and I need to query the commands by the name as 
 the name is unique.
 
-I used a `LinkedHashMap` implementation in the 
-subclasses of `Sell` to make the commands order
-be the same as the insertion order, because if the order 
-of the commands keeps changing the player will take longer
- to find the commands thay are looking for.
-
-In the `Room` class is used an `EnumMap` is it's more efficient than
-`HashMap`.
+In the `Room` class is used an `EnumMap` as it's more efficient than
+`HashMap` for enums.
 
 In `Maze` class I used a `List` to store the rooms, because a maze
 is a list of rooms and the each room is identified by it's index 
@@ -417,24 +426,40 @@ In the `Seller` class a `Map` is used to map an item description
 to a price, and when the player buys or sells an item the description
 is used to create the item using the `ItemFactory`.
 
-In the `Chest` class I used a list of items, I didn't use the item description
+In the `Chest` class I used a `List` of items, I didn't use the item description
 because the items in the chest are going to be collected once so
 it is safe to store the actual item.
-
 
 # Style Guide
 
 In this project I used [Google style guide](https://google.github.io/styleguide/javaguide.html)
 
-## File encoding: UTF-8
+# DevOps Implementation
 
-This is made clear in the pom.xml file
+## CI/CD Pipeline
 
-```xml
-<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-```
+I used `AWS CodePipeline` service to implement a CI/CD pipeline.
 
-## Horizontal alignment: never required
+![AWSPipeline](./AWSPipeline.png)
 
-I didn't use this as it's not required and in the clean code book
-stated that it's not a good idea.
+The pipeline consists of three steps
+
+### Pull Source Code From GitHub
+
+When the `master` branch changes Github will notify AWS Pipeline using web hooks
+to start the pipeline.
+
+### Building
+
+The building process uses `AWS CodeBuild` service to build the project.
+
+the service uses `buildspec.yml` file to specify how the project will get build.
+
+After the build the artifacts are stored in an S3 bucket to be deployed.
+
+### Deploying
+
+For deployment, I used `AWS Elastic Beanstalk` to manage and run the application.
+
+After the build process `AWS Pipeline` service pulls the artifacts from the S3 bucket and 
+provided it to `AWS Elastic Beanstalk` to run the application.
