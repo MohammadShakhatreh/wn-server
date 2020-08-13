@@ -7,7 +7,8 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Getter
 public class Game {
@@ -48,24 +49,38 @@ public class Game {
         this.startedAt = startedAt;
     }
 
+    /**
+     * Return the fight that the player is in.
+     *
+     */
     public Fight getFightByPlayer(Player player) {
         return fights.get(player);
     }
 
+    /**
+     * Add the fight to the game.
+     */
     public void addFight(Fight fight) {
         fight.getPlayers().forEach(player -> fights.put(player, fight));
     }
 
+    /**
+     * Distribute the player gold on all not lost players
+     * should be called after the player mode is set to lost.
+     */
     public void distributePlayerGold(Player player) {
 
         List<Player> notLostPlayers = this.players.values().stream()
                 .filter(p -> p.getMode() != PlayerMode.LOST)
-                .collect(Collectors.toList());
+                .collect(toList());
 
         int goldForEachPlayer = player.getGold() / notLostPlayers.size();
         notLostPlayers.forEach(p -> p.setGold(p.getGold() + goldForEachPlayer));
     }
 
+    /**
+     * Drop the player items
+     */
     public void dropPlayerItems(Player player) {
         Room room = maze.getRoom(player.getLocation());
         room.addItems(player.getItems());

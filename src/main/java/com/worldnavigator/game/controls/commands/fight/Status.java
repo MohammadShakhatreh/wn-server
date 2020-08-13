@@ -26,7 +26,7 @@ public class Status implements Command {
         Game game = context.getGame();
         Fight fight = game.getFightByPlayer(context.getPlayer());
 
-        return resolver.resolve(context, fight);
+        return resolver.status(context, fight);
     }
 
     @Override

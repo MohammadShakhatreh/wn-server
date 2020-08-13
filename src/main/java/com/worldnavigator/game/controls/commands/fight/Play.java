@@ -40,7 +40,7 @@ public class Play implements Command {
         Fight fight = game.getFightByPlayer(player);
 
         if (fight.play(player, hand))
-            return resolver.resolve(context, fight);
+            return resolver.status(context, fight);
 
         return "You already played your turn, you can't change your hand now!";
     }

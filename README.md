@@ -1,6 +1,6 @@
 # World Navigator
 
-A Multi-player text adventure game.
+A Multi-player text adventure game api at [api.mo-sh.xyz](http://api.mo-sh.xyz).
 
 ## Packaging and running 
 

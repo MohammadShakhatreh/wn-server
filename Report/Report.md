@@ -1,11 +1,17 @@
 # Effective Java
 
+## Item 5: Prefer dependency injection to hardwiring resources
 
-## Item 9: Prefer Try-With-Resources To Try-Finally
+In the maze classes like `Room`, `RoomSide`, ...etc all take their 
+dependencies from the constructor this allows `Jackson` library 
+to deserialize json to construct a maze from it.
 
-**Try-With-Resources** is used by the `GameLoader` when loading the maze file.
-And as the book stated it's shorter, more readable, 
-better handles closing resources and provides far better diagnostics.
+In web package and game commands also take their 
+dependencies from the constructor this allows spring to provide
+their dependencies.
+
+Using this technique makes it easy to change the 
+dependencies of a class without affecting or changing the class. 
 
 ## Item 10: Obey The General Contract When Overriding Equals
 
@@ -71,13 +77,17 @@ I also override it in the `RoomSide` subclasses
 to return the type as I think it's good for using it to output messages 
 to the player in the commands.
 
+## Item 16: In public classes, use accessor methods, not public fields
+
+all classes in the project uses this item.
+
 ## Item 17: Minimize Mutability
 
 Some immutable classes in the project are `Key`, `Wall` and `Seller`.
 
 Any class that are not immutable I minimized the mutability as much as I can
 for example in `Room` class the sides map can't be accessed outside the class
-but made `getSide` method to access it. 
+but made `getSide` method to access each side. 
 
 In the `Seller` class the prices map is unmodifiable, so it's fine to
 return access to it by the `getPrices` method.
@@ -85,7 +95,7 @@ return access to it by the `getPrices` method.
 ## Item 19: Design And Document For Inheritance Or Else Prohibit It
 
 The classes that are designed for inheritance in the project are
-`Item`, `RoomSide` and `Invoker` classes.
+`Item` and `RoomSide` classes.
 
 In the `Item` class it's made clear that the `toString` method 
 must be overridden and what to be expected from it.
@@ -110,17 +120,27 @@ keyword and make the nessesary changes.
 
 This better than allowing it in the first place as it can be abused.
 
+## Item 21: Design interfaces for posterity
+
+The `Command` interface has new default methods `validate` and 
+`available` the two methods return true as this implementation 
+is reasonable as in the previous command subclasses in the previous
+version of the project the responsibility of these methods where in
+the execute method so adding these new methods won't break older commands.
+
+So with the new methods older command classes are available and their
+arguments are valid by default and new command can take advantage of
+these methods to separate the responsibilty of the execute method.  
+
+## Item 22: Use interfaces only to define types
+
+Used whenever possible in the project.
+
 ## Item 23: Prefer class hierarchies to tagged classes
 
 Class hierarchies I made in the project are `RoomSide` and `Item` classes.
 
 This way the code is clean, short and can be easily extensible. 
-
-## Item 24: Favor static member classes over nonstatic
-
-I used inner classes in `Invoker` class.
-
-I didn't put them as static because they need to access the enclosing instance.
 
 ## Item 25: Limit source files to a single top-level class
 
@@ -142,6 +162,8 @@ different behavior with each enum constant.
 
 In the `Direction` enum I assigned three behaviors `left`, `right` and `reverse`.
 
+Other enums created are `Hand`, `FightStatus` and `PlayerMode`.
+
 This also makes the code cleaner and more robust.
 
 ## Item 37: Use EnumMap instead of ordinal indexing  
@@ -153,6 +175,10 @@ Used in the `Room` implementation to store the room sides.
 ## Item 40: Consistently use the Override annotation
 
 using this can prevent hidden bugs like when overriding `equals` method.
+
+## Item 42: Prefer lambdas to anonymous classes
+
+Used whenever possible in the project especially in streams.
 
 ## Item 49: Check parameters for validity
 
@@ -170,15 +196,12 @@ public Lock(
     if(open && locked)
         throw new IllegalArgumentException("The lock can't be open and locked at the same time.");
 
-    if(key == null && locked)
-        throw new IllegalArgumentException("You have to provide a key if you want to lock things.");
-
     this.open = open;
     this.locked = locked;
 }
 ```
 
-`Objects.requireNonNull` is used when ever appropriate.
+`Objects.requireNonNull` is used when ever appropriate in the project.
 
 ## Item 53: Use varargs judiciously
 
@@ -191,14 +214,34 @@ In the `HiddenItem` interface the `getItem` method returns
 an `Optional<Item>` because it's Ok to not have a hidden item and
 making the method returns `Optional` enforces that.
 
- 
+It's used in the `Lockable` interface because it's OK to not have a 
+lock.
+
+## Item 57: Minimize the scope of local variables
+
+I used this item as much as possible.
+
+## Item 64: Refer to objects by their interfaces
+
+Used whenever applicable.
+
+For example I used `Command` interface to refer to commands in 
+the invoker execute method.
+
+## Item 72: Favor the use of standard exceptions
+
+Some of the exceptions used are `IlligalArgumentException` and `IlligalStateException`.
+
+## Item 85: Prefer alternatives to Java serialization
+
+I used `Jackson` library to deserialize the maze from json format.
 
 # Clean Code
 
 ## Use Intention-Revealing Names
 
 For example the `Lockable` interface the name implies that the 
-object can be open or closed, and it's applied to the door and the chest
+object can be open or closed, and it's applied to the door and the chest objects
 
 ```
 public interface Lockable {
@@ -274,11 +317,7 @@ When implementing an interface the methods of it should be together.
 This pattern is used in the `check`, `look` and `use` commands as these
 commands deals with each type differently.
 
-![RoomSideVisitor](./RoomSideVisitor.png)
-
-and visitor for the items
-
-![ItemVisitor](./ItemVisitor.png)
+![VisitorPattern](./VisitorPattern.png)
 
 ## Abstract Factory Pattern
 
@@ -289,13 +328,13 @@ which takes a `String` that represents the item description following
 the item description format described in its `toString()` method 
 and returns the matching `Item` object.
 
-And the class is a Singleton as one factory is needed.
-
 ![AbstractFactory](./AbstractFactory.png)
 
 ## Singleton Pattern
 
-This pattern is used in the `ItemFactory` and the `GameLoader`
+This pattern is used in the `ItemFactory`.
+
+And used in the commands classes, but these are made singleton using spring core IoC mechanism.  
 
 as we need one object from these classes and global access to them.
 
@@ -305,12 +344,8 @@ Used to implement the various commands of the game
 
 ![CommandPattern](./CommandPattern.png)
 
-## State Pattern
+## Facade Pattern
 
-Used to implement the Invokers as they represent the state of the player whether the player is in trade 
-mode, game mode or fight mode.
-
-![StatePattern](./StatePattern.png)
 
 # SOLID Principles
 

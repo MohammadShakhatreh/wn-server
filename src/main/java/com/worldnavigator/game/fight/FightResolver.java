@@ -4,17 +4,18 @@ import com.worldnavigator.game.Game;
 import com.worldnavigator.game.Player;
 import com.worldnavigator.game.PlayerMode;
 import com.worldnavigator.game.controls.PlayerContext;
+import com.worldnavigator.game.maze.Room;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FightResolver {
 
-    public synchronized String resolve(PlayerContext context, Fight fight) {
+    public synchronized String status(PlayerContext context, Fight fight) {
         Player player = context.getPlayer();
 
         switch (fight.status(player)) {
             case WON:
-                resolve(context, fight.getOpponent(player));
+                resolve(context, fight);
                 return "You won the fight!";
 
             case LOST:
@@ -35,12 +36,24 @@ public class FightResolver {
         }
     }
 
-    private void resolve(PlayerContext context, Player loser) {
+    /**
+     * This method must be called with the winner context
+     * to resolve the fight.
+     *
+     * @param context winner player context
+     */
+    public synchronized void resolve(PlayerContext context, Fight fight) {
         Game game = context.getGame();
         Player player = context.getPlayer();
+        Player opponent = fight.getOpponent(player);
 
-        player.addItems(loser.getItems());
-        game.distributePlayerGold(loser);
-        loser.setMode(PlayerMode.LOST);
+        player.addItems(opponent.getItems());
+        game.distributePlayerGold(opponent);
+
+        player.setMode(PlayerMode.WALKING);
+        opponent.setMode(PlayerMode.LOST);
+
+        Room room = context.getCurrentRoom();
+        room.removePlayer(opponent);
     }
 }
