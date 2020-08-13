@@ -74,6 +74,9 @@ public final class Game {
                 .filter(p -> p.getMode() != PlayerMode.LOST)
                 .collect(toList());
 
+        if(notLostPlayers.isEmpty())
+            return;
+
         int goldForEachPlayer = player.getGold() / notLostPlayers.size();
         notLostPlayers.forEach(p -> p.setGold(p.getGold() + goldForEachPlayer));
     }
