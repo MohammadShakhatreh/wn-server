@@ -5,6 +5,7 @@ import com.worldnavigator.game.Player;
 import com.worldnavigator.game.PlayerMode;
 import com.worldnavigator.game.controls.Command;
 import com.worldnavigator.game.controls.PlayerContext;
+import com.worldnavigator.game.fight.Fight;
 import com.worldnavigator.game.fight.FightResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,7 +34,11 @@ public final class Quit implements Command {
                 break;
 
             case FIGHTING:
-                resolver.resolve(context, game.getFightByPlayer(player));
+                Fight fight = game.getFightByPlayer(player);
+                Player opponent = fight.getOpponent(player);
+                PlayerContext opponentContext = new PlayerContext(game, opponent);
+
+                resolver.resolve(opponentContext, fight);
                 break;
         }
 
