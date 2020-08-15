@@ -11,6 +11,8 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService implements UserDetailsService {
 
@@ -24,6 +26,12 @@ public class UserService implements UserDetailsService {
     }
 
     public User create(UserDto data) {
+
+        Optional<User> optional = userRepository.findById(data.getUsername());
+
+        if(optional.isPresent())
+            throw new IllegalArgumentException("There is a user with this username.");
+
         User account = new User(
                 data.getName(),
                 data.getUsername().trim().toLowerCase(),

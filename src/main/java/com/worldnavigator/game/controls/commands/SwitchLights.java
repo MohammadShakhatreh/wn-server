@@ -37,6 +37,6 @@ public final class SwitchLights implements Command {
 
     @Override
     public String description() {
-        return "Will turn the room lights on or off if the room have lights";
+        return "Will turn the room lights on or off if the room have lights.";
     }
 }

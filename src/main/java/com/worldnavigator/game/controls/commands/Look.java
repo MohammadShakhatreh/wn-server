@@ -52,6 +52,6 @@ public final class Look implements Command {
 
     @Override
     public String description() {
-        return "Gives a description of whats in front of you";
+        return "Gives a description of whats in front of you.";
     }
 }

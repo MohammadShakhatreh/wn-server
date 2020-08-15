@@ -26,7 +26,7 @@ public final class List implements Command {
         sb.append("Available items:\n");
         prices.forEach(
                 (item, price) ->
-                        sb.append(item).append(": ").append(price).append("\n")
+                        sb.append("\t").append(item).append(" => ").append(price).append("\n")
         );
 
         return sb.toString();

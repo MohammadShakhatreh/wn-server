@@ -23,4 +23,8 @@ public class GameInfo {
     private final int timeout;
 
     private final LocalDateTime startedAt;
+
+    private final boolean isStarted;
+
+    private final boolean isFinished;
 }

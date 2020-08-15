@@ -42,7 +42,13 @@ public final class Quit implements Command {
                 break;
         }
 
-        return "You are out of the game.";
+        return "You are out of the game now.";
+    }
+
+    @Override
+    public boolean available(PlayerContext context) {
+        PlayerMode mode = context.getPlayer().getMode();
+        return mode == PlayerMode.WALKING || mode == PlayerMode.FIGHTING;
     }
 
     @Override

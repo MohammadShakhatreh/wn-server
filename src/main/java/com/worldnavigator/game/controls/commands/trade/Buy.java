@@ -75,6 +75,6 @@ public final class Buy implements Command {
 
     @Override
     public String description() {
-        return "Buy an item from the seller";
+        return "Buy an item from the seller.";
     }
 }

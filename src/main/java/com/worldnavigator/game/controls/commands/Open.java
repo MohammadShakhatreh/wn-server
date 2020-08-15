@@ -59,6 +59,6 @@ public final class Open implements Command {
 
     @Override
     public String description() {
-        return "If you are in front of an unlocked door/chest it will open it";
+        return "If you are in front of an unlocked door/chest it will open it.";
     }
 }

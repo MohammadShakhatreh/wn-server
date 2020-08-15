@@ -43,7 +43,7 @@ public class AuthenticationController {
 
     @PostMapping("login")
     @ResponseStatus(HttpStatus.CREATED)
-    public Object login(@Valid @RequestBody LoginRequest loginRequest) {
+    public JwtToken login(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 loginRequest.getUsername(),
                 loginRequest.getPassword());

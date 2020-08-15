@@ -47,11 +47,11 @@ public class FightResolver {
         Player player = context.getPlayer();
         Player opponent = fight.getOpponent(player);
 
-        player.addItems(opponent.getItems());
-        game.distributePlayerGold(opponent);
-
         player.setMode(PlayerMode.WALKING);
         opponent.setMode(PlayerMode.LOST);
+
+        player.addItems(opponent.getItems());
+        game.distributePlayerGold(opponent);
 
         Room room = context.getCurrentRoom();
         room.removePlayer(opponent);

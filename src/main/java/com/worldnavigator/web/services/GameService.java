@@ -1,5 +1,7 @@
 package com.worldnavigator.web.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.worldnavigator.game.Game;
 import com.worldnavigator.game.Player;
 import com.worldnavigator.game.PlayerMode;
@@ -11,7 +13,9 @@ import com.worldnavigator.game.maze.Maze;
 import com.worldnavigator.game.maze.Room;
 import com.worldnavigator.web.dto.ExecutionRequest;
 import com.worldnavigator.web.dto.NewGameRequest;
+import com.worldnavigator.web.entities.MazeTemplate;
 import com.worldnavigator.web.entities.User;
+import com.worldnavigator.web.repositories.MazeTemplateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,24 +28,38 @@ import java.util.stream.Collectors;
 public class GameService {
 
     private final Invoker invoker;
-
     private final Map<UUID, Game> games;
 
+    private final ObjectMapper mapper;
+    private final MazeTemplateRepository mazeTemplateRepository;
+
     @Autowired
-    public GameService(Invoker invoker) {
+    public GameService(Invoker invoker, ObjectMapper mapper, MazeTemplateRepository mazeTemplateRepository) {
+        this.mapper = mapper;
         this.invoker = invoker;
         this.games = new HashMap<>();
+        this.mazeTemplateRepository = mazeTemplateRepository;
     }
 
-    public Game create(User user, NewGameRequest request) {
+    public Game create(User user, NewGameRequest request) throws JsonProcessingException {
+
+        MazeTemplate template = mazeTemplateRepository
+                .findById(request.getMazeId())
+                .orElseThrow(() ->
+                        new NoSuchElementException(
+                                String.format("There is no maze template with id (%d).", request.getMazeId())
+                        )
+                );
+
         UUID uuid = UUID.randomUUID();
+        Maze maze = mapper.readValue(template.getTemplate(), Maze.class);
         LocalDateTime startedAt = LocalDateTime.now().plusMinutes(request.getStartsAfter());
 
         Game game = new Game(
                 uuid,
                 user.getUsername(),
                 request.getName(),
-                request.getMaze(),
+                maze,
                 request.getGold(),
                 request.getTimeout(),
                 startedAt
@@ -55,7 +73,7 @@ public class GameService {
         Game game = getGame(uuid);
 
         if(game.isStarted())
-            throw new IllegalStateException("The game started you can't join.");
+            throw new IllegalStateException("The game has started you can't join.");
 
         else if(game.isFinished())
             throw new IllegalStateException("The game has finished you can't join.");
@@ -63,7 +81,7 @@ public class GameService {
         Map<String, Player> players = game.getPlayers();
 
         if(players.containsKey(user.getUsername()))
-            throw new IllegalArgumentException("There is already a player with this name.");
+            throw new IllegalArgumentException("You already join the game.");
 
         Player player = generatePlayer(game, user.getUsername());
         players.put(user.getUsername(), player);
@@ -85,6 +103,9 @@ public class GameService {
         List<Room> emptyRooms = maze.getRooms().stream()
                 .filter(Room::isEmpty)
                 .collect(Collectors.toList());
+
+        if(emptyRooms.isEmpty())
+            throw new NoSuchElementException("There is no empty rooms to spawn into.");
 
         Room randomRoom = emptyRooms.get(random.nextInt(emptyRooms.size()));
 

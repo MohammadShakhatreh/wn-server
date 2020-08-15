@@ -1,5 +1,6 @@
 package com.worldnavigator.web.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.worldnavigator.game.Game;
 import com.worldnavigator.game.Player;
 import com.worldnavigator.game.controls.Command;
@@ -32,7 +33,7 @@ public class GameController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public GameInfo create(User user, @Valid @RequestBody NewGameRequest request) {
+    public GameInfo create(User user, @Valid @RequestBody NewGameRequest request) throws JsonProcessingException {
         Game game = gameService.create(user, request);
         return gameMapper.toGameInfo(game);
     }
@@ -47,6 +48,7 @@ public class GameController {
     public List<GameInfo> list() {
         return gameService.getGames().values()
                 .stream()
+                .filter(game -> !game.isStarted())
                 .map(gameMapper::toGameInfo)
                 .collect(toList());
     }

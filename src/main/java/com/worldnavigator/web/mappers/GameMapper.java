@@ -2,8 +2,10 @@ package com.worldnavigator.web.mappers;
 
 import com.worldnavigator.game.Game;
 import com.worldnavigator.game.Player;
+import com.worldnavigator.web.dto.MazeTemplateInfo;
 import com.worldnavigator.web.dto.PlayerInfo;
 import com.worldnavigator.web.dto.GameInfo;
+import com.worldnavigator.web.entities.MazeTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,7 +19,9 @@ public class GameMapper {
                 game.getWinner(),
                 game.getPlayers().size(),
                 game.getTimeout(),
-                game.getStartedAt()
+                game.getStartedAt(),
+                game.isStarted(),
+                game.isFinished()
         );
     }
 
@@ -30,6 +34,13 @@ public class GameMapper {
                 player.getLocation(),
                 player.getDirection(),
                 player.getItems().keySet()
+        );
+    }
+
+    public MazeTemplateInfo toMazeTemplateInfo(MazeTemplate mazeTemplate) {
+        return new MazeTemplateInfo(
+                mazeTemplate.getId(),
+                mazeTemplate.getName()
         );
     }
 }

@@ -1,7 +1,6 @@
 package com.worldnavigator.game.controls;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.util.StringUtils;
 
 public interface Command {
 
@@ -53,23 +52,6 @@ public interface Command {
     @JsonProperty("arguments")
     default String args() {
         return "";
-    }
-
-    /**
-     * The format of the usage string is
-     * the name of the command and it's arguments
-     *
-     * For example: "move &lt;forward|backward&gt;"
-     * @return how to call the command
-     */
-    @JsonProperty("usage")
-    default String usage() {
-        String arguments = args();
-
-        if(StringUtils.hasText(arguments))
-            return name();
-
-        return name() + " " + arguments;
     }
 
     /**

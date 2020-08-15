@@ -56,7 +56,7 @@ public final class Move implements Command {
             }
 
         } else {
-            return "You can't move " + args[0] + " there is not door.";
+            return "You can't move " + args[0] + " there is no door.";
         }
     }
 
@@ -149,6 +149,6 @@ public final class Move implements Command {
 
     @Override
     public String description() {
-        return "Moves the player between rooms";
+        return "Moves the player between rooms.";
     }
 }

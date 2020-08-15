@@ -51,7 +51,7 @@ public final class Invoker {
                     return "The arguments you supplied are not valid!";
 
             } else {
-                return "The command (%s) is not available!";
+                return String.format("The command (%s) is not available!", parts[0]);
             }
         }
 

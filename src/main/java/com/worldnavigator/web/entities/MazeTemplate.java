@@ -22,6 +22,6 @@ public class MazeTemplate {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false, unique = true)
-    private String s3Key;
+    @Column(nullable = false, columnDefinition = "text")
+    private String template;
 }

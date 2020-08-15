@@ -51,6 +51,6 @@ public final class Use implements Command {
 
     @Override
     public String description() {
-        return "Uses the item, for example using a flashlight would turn it on or off.";
+        return "Uses an item, for example using a flashlight would turn it on or off.";
     }
 }

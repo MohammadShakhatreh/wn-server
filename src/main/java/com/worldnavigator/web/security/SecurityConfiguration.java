@@ -17,10 +17,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.crypto.SecretKey;
 
-import static org.springframework.http.HttpMethod.*;
+import static org.springframework.http.HttpMethod.DELETE;
+import static org.springframework.http.HttpMethod.GET;
 
 
 @Configuration
@@ -39,6 +42,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.cors();
+
         http
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -57,6 +62,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .mvcMatchers(DELETE, "/users/@{username}")
                     .access("#username == principal?.username or hasRole('ROLE_ADMIN')")
+                .mvcMatchers(GET, "/users/me")
+                    .authenticated()
                 .mvcMatchers("/users/**")
                     .permitAll();
 
@@ -89,5 +96,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public SecretKey secretKey() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtConfiguration.getSecret()));
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**");
+            }
+        };
     }
 }

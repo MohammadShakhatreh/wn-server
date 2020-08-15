@@ -8,7 +8,7 @@ spring:
     password: OTL4krLJaCPZipkPTUEK
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     open-in-view: false
 application:
   jwt:

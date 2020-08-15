@@ -27,7 +27,7 @@ public final class Rotate implements Command {
         else
             player.setDirection(player.getDirection().right());
 
-        return "Your direction now is " + player.getDirection().name().toLowerCase();
+        return "Your direction now is " + player.getDirection().name().toLowerCase() + ".";
     }
 
     @Override
@@ -48,6 +48,6 @@ public final class Rotate implements Command {
 
     @Override
     public String description() {
-        return "Rotate the player to the left or right";
+        return "Rotate the player to the left or right.";
     }
 }
